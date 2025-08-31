@@ -4,17 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The System ✨</title>
-        
- <!-- Theme color for browser UI -->
-<meta name="theme-color" content="#ff99cc" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#d47ba6" media="(prefers-color-scheme: dark)">
-
-<!-- iOS specific meta tags -->
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="The System">
     
-    <!-- General favicon -->
+    <meta name="theme-color" content="#ff99cc" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#d47ba6" media="(prefers-color-scheme: dark)">
+    
+    <link rel="apple-touch-icon" href="icon-192x192.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="icon-180x180.png">
+    
     <link rel="icon" type="image/png" sizes="32x32" href="icon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="icon-16x16.png">
     
@@ -233,6 +230,10 @@
             margin-bottom: 16px;
             font-size: 16px;
             letter-spacing: 0.5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
         
         .entry-field {
@@ -357,15 +358,11 @@
             margin-right: 8px;
         }
         
-        .entry.collapsed {
-            cursor: pointer;
-        }
-        
         .entry.collapsed .entry-details {
             display: none;
         }
         
-        .entry.collapsed:hover {
+        .entry:hover {
             background: rgba(255, 182, 193, 0.1);
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(255, 182, 193, 0.2);
@@ -405,7 +402,28 @@
             box-shadow: 0 6px 20px rgba(255, 182, 193, 0.4);
         }
 
-        /* Remove animated sparkle effect */
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-btn {
+            background: rgba(255, 240, 245, 0.8);
+            border: 2px solid rgba(255, 182, 193, 0.4);
+            color: #8b5a83;
+            padding: 8px 12px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            border-color: #ff99cc;
+            transform: translateY(-1px);
+            background: rgba(255, 182, 193, 0.2);
+        }
 
         @keyframes sparkle {
             0% { opacity: 0.7; transform: scale(1); }
@@ -647,8 +665,7 @@
                 
                 const selectedMood = document.querySelector('.mood-btn.selected')?.dataset.mood || '';
                 
-                const entry = {
-                    id: Date.now(),
+                const newOrUpdatedEntry = {
                     date: document.getElementById('date').value,
                     wakeTime: document.getElementById('wakeTime').value,
                     sleepTime: document.getElementById('sleepTime').value,
@@ -660,8 +677,21 @@
                     mood: selectedMood,
                     notes: document.getElementById('notes').value
                 };
+
+                const form = e.target;
+                const editingId = form.dataset.editingId;
+
+                if (editingId) {
+                    // This is an edit operation
+                    const entryIndex = entries.findIndex(entry => entry.id == editingId);
+                    if (entryIndex !== -1) {
+                        entries[entryIndex] = { ...newOrUpdatedEntry, id: entries[entryIndex].id };
+                    }
+                } else {
+                    // This is a new entry operation
+                    entries.push({ ...newOrUpdatedEntry, id: Date.now() });
+                }
                 
-                entries.push(entry);
                 saveEntries();
                 showSuccessMessage();
                 resetForm();
@@ -669,58 +699,58 @@
             });
         }
 
-        function addLocationInput() {
+        function addLocationInput(value = '') {
             const locationsList = document.getElementById('locationsList');
             const newRow = document.createElement('div');
             newRow.className = 'input-row';
             newRow.innerHTML = `
-                <input type="text" class="location-input" placeholder="Location...">
+                <input type="text" class="location-input" placeholder="Location..." value="${value}">
                 <button type="button" class="remove-btn" onclick="removeRow(this)">Remove 🗑️</button>
             `;
             locationsList.appendChild(newRow);
         }
 
-        function addActivityInput() {
+        function addActivityInput(name = '', duration = '') {
             const activitiesList = document.getElementById('activitiesList');
             const newRow = document.createElement('div');
             newRow.className = 'activity-row';
             newRow.innerHTML = `
-                <input type="text" class="activity-name" placeholder="Activity...">
-                <input type="text" class="activity-duration" placeholder="Duration...">
+                <input type="text" class="activity-name" placeholder="Activity..." value="${name}">
+                <input type="text" class="activity-duration" placeholder="Duration..." value="${duration}">
                 <button type="button" class="remove-btn" onclick="removeRow(this)">Remove 🗑️</button>
             `;
             activitiesList.appendChild(newRow);
         }
 
-        function addMealInput() {
+        function addMealInput(value = '') {
             const mealsList = document.getElementById('mealsList');
             const newRow = document.createElement('div');
             newRow.className = 'input-row';
             newRow.innerHTML = `
-                <input type="text" class="meal-input" placeholder="Meal...">
+                <input type="text" class="meal-input" placeholder="Meal..." value="${value}">
                 <button type="button" class="remove-btn" onclick="removeRow(this)">Remove 🗑️</button>
             `;
             mealsList.appendChild(newRow);
         }
 
-        function addSnackInput() {
+        function addSnackInput(value = '') {
             const snacksList = document.getElementById('snacksList');
             const newRow = document.createElement('div');
             newRow.className = 'input-row';
             newRow.innerHTML = `
-                <input type="text" class="snack-input" placeholder="Snack...">
+                <input type="text" class="snack-input" placeholder="Snack..." value="${value}">
                 <button type="button" class="remove-btn" onclick="removeRow(this)">Remove 🗑️</button>
             `;
             snacksList.appendChild(newRow);
         }
 
-        function addMoneyInput() {
+        function addMoneyInput(amount = '', reason = '') {
             const moneyList = document.getElementById('moneyList');
             const newRow = document.createElement('div');
             newRow.className = 'money-row';
             newRow.innerHTML = `
-                <input type="number" class="money-amount" step="0.01" placeholder="Amount">
-                <input type="text" class="money-reason" placeholder="Description...">
+                <input type="number" class="money-amount" step="0.01" placeholder="Amount" value="${amount}">
+                <input type="text" class="money-reason" placeholder="Description..." value="${reason}">
                 <button type="button" class="remove-btn" onclick="removeRow(this)">Remove 🗑️</button>
             `;
             moneyList.appendChild(newRow);
@@ -731,13 +761,15 @@
         }
 
         function resetForm() {
-            document.getElementById('logForm').reset();
+            const form = document.getElementById('logForm');
+            form.reset();
+            form.removeAttribute('data-editing-id');
             document.getElementById('date').valueAsDate = new Date();
             document.querySelectorAll('.mood-btn').forEach(btn => {
                 btn.classList.remove('selected');
             });
+            document.querySelector('.submit-btn').textContent = 'Record Entry 💖';
             
-            // Reset all dynamic input lists to just one input
             resetInputList('locationsList', 'location-input', 'Home, office, downtown...');
             resetInputList('mealsList', 'meal-input', 'Breakfast, lunch, dinner...');
             resetInputList('snacksList', 'snack-input', 'Coffee, fruit, nuts...');
@@ -783,12 +815,10 @@
         }
 
         function saveEntries() {
-            // Store in localStorage for data persistence
             localStorage.setItem('journalEntries', JSON.stringify(entries));
         }
 
         function loadEntries() {
-            // Load from localStorage for data persistence
             const stored = localStorage.getItem('journalEntries');
             if (stored) {
                 try {
@@ -871,8 +901,17 @@
                 };
 
                 let entryHTML = `
-                    <div class="entry">
-                        <div class="entry-date">${formatDate(entry.date)}</div>
+                    <div class="entry collapsed">
+                        <div class="entry-date">
+                            <span onclick="toggleEntry(this.parentNode)">
+                                ${formatDate(entry.date)} 
+                                <span class="expand-indicator">Click to expand ▼</span>
+                            </span>
+                            <div class="action-buttons">
+                                <button class="action-btn" onclick="editEntry(${entry.id})">Edit 📝</button>
+                                <button class="action-btn" onclick="deleteEntry(${entry.id})">Delete 🗑️</button>
+                            </div>
+                        </div>
                         <div class="entry-details">
                 `;
 
@@ -987,7 +1026,8 @@
             entriesDiv.innerHTML = entriesHTML;
         }
 
-        function toggleEntry(entryElement) {
+        function toggleEntry(entryDateElement) {
+            const entryElement = entryDateElement.closest('.entry');
             const details = entryElement.querySelector('.entry-details');
             const indicator = entryElement.querySelector('.expand-indicator');
             const isCollapsed = entryElement.classList.contains('collapsed');
@@ -1001,6 +1041,73 @@
                 details.style.display = 'none';
                 indicator.textContent = 'Click to expand ▼';
             }
+        }
+
+        function deleteEntry(id) {
+            if (confirm("Are you sure you want to delete this entry? This action cannot be undone.")) {
+                entries = entries.filter(entry => entry.id !== id);
+                saveEntries();
+                updateViewTab();
+            }
+        }
+
+        function editEntry(id) {
+            const entryToEdit = entries.find(entry => entry.id === id);
+            if (!entryToEdit) {
+                alert("Entry not found.");
+                return;
+            }
+
+            // Switch to the 'Add Entry' tab
+            showTab('add');
+
+            // Find the form and set the editing ID
+            const form = document.getElementById('logForm');
+            form.setAttribute('data-editing-id', id);
+            document.querySelector('.submit-btn').textContent = 'Save Changes 💾';
+            
+            // Populate form fields with existing data
+            document.getElementById('date').value = entryToEdit.date || '';
+            document.getElementById('wakeTime').value = entryToEdit.wakeTime || '';
+            document.getElementById('sleepTime').value = entryToEdit.sleepTime || '';
+            document.getElementById('notes').value = entryToEdit.notes || '';
+            
+            // Reset and then populate the dynamic lists
+            resetInputList('locationsList', 'location-input', 'Home, office, downtown...');
+            resetInputList('mealsList', 'meal-input', 'Breakfast, lunch, dinner...');
+            resetInputList('snacksList', 'snack-input', 'Coffee, fruit, nuts...');
+            resetActivityList();
+            resetMoneyList();
+
+            // Populate dynamic lists if data exists
+            if (entryToEdit.locations && entryToEdit.locations.length > 0) {
+                document.getElementById('locationsList').innerHTML = ''; // Clear initial input
+                entryToEdit.locations.forEach(loc => addLocationInput(loc));
+            }
+            if (entryToEdit.meals && entryToEdit.meals.length > 0) {
+                document.getElementById('mealsList').innerHTML = '';
+                entryToEdit.meals.forEach(meal => addMealInput(meal));
+            }
+            if (entryToEdit.snacks && entryToEdit.snacks.length > 0) {
+                document.getElementById('snacksList').innerHTML = '';
+                entryToEdit.snacks.forEach(snack => addSnackInput(snack));
+            }
+            if (entryToEdit.activities && entryToEdit.activities.length > 0) {
+                document.getElementById('activitiesList').innerHTML = '';
+                entryToEdit.activities.forEach(act => addActivityInput(act.name, act.duration));
+            }
+            if (entryToEdit.moneyTransactions && entryToEdit.moneyTransactions.length > 0) {
+                document.getElementById('moneyList').innerHTML = '';
+                entryToEdit.moneyTransactions.forEach(money => addMoneyInput(money.amount, money.reason));
+            }
+            
+            // Select the correct mood button
+            document.querySelectorAll('.mood-btn').forEach(btn => {
+                btn.classList.remove('selected');
+                if (btn.dataset.mood === entryToEdit.mood) {
+                    btn.classList.add('selected');
+                }
+            });
         }
     </script>
 </body>
