@@ -5,19 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The System ✨</title>
     
-    <!-- Web App Manifest -->
     <link rel="manifest" href="manifest.json">
     
-    <!-- iOS specific icons -->
     <link rel="apple-touch-icon" href="icon-192x192.png">
     <link rel="apple-touch-icon" sizes="152x152" href="icon-152x152.png">
     <link rel="apple-touch-icon" sizes="180x180" href="icon-180x180.png">
     
-    <!-- General favicon -->
     <link rel="icon" type="image/png" sizes="32x32" href="icon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="icon-16x16.png">
     
-    <!-- PWA Meta Tags -->
     <meta name="theme-color" content="#ff99cc">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -238,6 +234,7 @@
             margin-bottom: 16px;
             font-size: 16px;
             letter-spacing: 0.5px;
+            cursor: pointer; /* Make it clickable */
         }
         
         .entry-field {
@@ -362,15 +359,11 @@
             margin-right: 8px;
         }
         
-        .entry.collapsed {
-            cursor: pointer;
-        }
-        
         .entry.collapsed .entry-details {
             display: none;
         }
         
-        .entry.collapsed:hover {
+        .entry:hover {
             background: rgba(255, 182, 193, 0.1);
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(255, 182, 193, 0.2);
@@ -380,6 +373,7 @@
             color: #ff99cc;
             font-size: 12px;
             margin-left: 8px;
+            font-weight: 400;
         }
 
         .import-export-controls {
@@ -409,24 +403,7 @@
             box-shadow: 0 6px 20px rgba(255, 182, 193, 0.4);
         }
 
-        /* Add some sparkly effects */
-        .header::before {
-            content: '✨';
-            position: absolute;
-            top: 10px;
-            left: 20px;
-            font-size: 20px;
-            animation: sparkle 2s ease-in-out infinite alternate;
-        }
-
-        .header::after {
-            content: '💖';
-            position: absolute;
-            top: 10px;
-            right: 20px;
-            font-size: 20px;
-            animation: sparkle 2s ease-in-out infinite alternate-reverse;
-        }
+        /* Remove animated sparkle effect */
 
         @keyframes sparkle {
             0% { opacity: 0.7; transform: scale(1); }
@@ -892,8 +869,11 @@
                 };
 
                 let entryHTML = `
-                    <div class="entry">
-                        <div class="entry-date">${formatDate(entry.date)}</div>
+                    <div class="entry collapsed">
+                        <div class="entry-date" onclick="toggleEntry(this.parentNode)">
+                            ${formatDate(entry.date)} 
+                            <span class="expand-indicator">Click to expand ▼</span>
+                        </div>
                         <div class="entry-details">
                 `;
 
@@ -1006,6 +986,22 @@
             }).join('');
             
             entriesDiv.innerHTML = entriesHTML;
+        }
+
+        function toggleEntry(entryElement) {
+            const details = entryElement.querySelector('.entry-details');
+            const indicator = entryElement.querySelector('.expand-indicator');
+            const isCollapsed = entryElement.classList.contains('collapsed');
+            
+            if (isCollapsed) {
+                entryElement.classList.remove('collapsed');
+                details.style.display = 'block';
+                indicator.textContent = 'Click to collapse ▲';
+            } else {
+                entryElement.classList.add('collapsed');
+                details.style.display = 'none';
+                indicator.textContent = 'Click to expand ▼';
+            }
         }
     </script>
 </body>
