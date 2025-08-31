@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The System ✨</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #ffeef8 0%, #fff0f5 50%, #fce4ec 100%);
+            color: #4a4a4a;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            background: linear-gradient(135deg, #ffb3d9, #ff99cc);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(255, 182, 193, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+        }
+        
+        .header h1 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #ffffff;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(255, 182, 193, 0.2);
+            border: 2px solid rgba(255, 182, 193, 0.3);
+            overflow: hidden;
+        }
+        
+        .tab {
+            flex: 1;
+            padding: 18px 24px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            font-family: inherit;
+            color: #8b5a83;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .tab.active {
+            background: linear-gradient(135deg, #ff99cc, #ffb3d9);
+            color: #ffffff;
+            box-shadow: 0 2px 10px rgba(255, 182, 193, 0.4);
+        }
+        
+        .tab:hover:not(.active) {
+            background: rgba(255, 182, 193, 0.2);
+            color: #6b4663;
+        }
+        
+        .content {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 8px 32px rgba(255, 182, 193, 0.2);
+            border: 2px solid rgba(255, 182, 193, 0.2);
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .form-group {
+            margin-bottom: 30px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 12px;
+            font-weight: 500;
+            color: #8b5a83;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+        }
+        
+        input, textarea, select {
+            width: 100%;
+            padding: 14px 16px;
+            background: rgba(255, 240, 245, 0.8);
+            border: 2px solid rgba(255, 182, 193, 0.3);
+            border-radius: 12px;
+            font-size: 14px;
+            font-family: inherit;
+            color: #4a4a4a;
+            transition: all 0.3s ease;
+        }
+        
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #ff99cc;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 0 0 3px rgba(255, 182, 193, 0.2);
+        }
+        
+        input::placeholder, textarea::placeholder {
+            color: #b19bb8;
+        }
+        
+        textarea {
+            height: 100px;
+            resize: vertical;
+        }
+        
+        .mood-selector {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .mood-btn {
+            padding: 12px 20px;
+            border: 2px solid rgba(255, 182, 193, 0.4);
+            border-radius: 20px;
+            background: rgba(255, 240, 245, 0.8);
+            cursor: pointer;
+            font-size: 12px;
+            font-family: inherit;
+            color: #8b5a83;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .mood-btn:hover {
+            border-color: #ff99cc;
+            background: rgba(255, 182, 193, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .mood-btn.selected {
+            border-color: #ff99cc;
+            background: linear-gradient(135deg, #ff99cc, #ffb3d9);
+            color: #ffffff;
+            box-shadow: 0 4px 15px rgba(255, 182, 193, 0.4);
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #ff99cc, #ffb3d9);
+            color: #ffffff;
+            border: none;
+            border-radius: 15px;
+            font-size: 14px;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 0.5px;
+            box-shadow: 0 6px 20px rgba(255, 182, 193, 0.3);
+        }
+        
+        .submit-btn:hover {
+            background: linear-gradient(135deg, #ff80bf, #ff99cc);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 182, 193, 0.4);
+        }
+        
+        .success-msg {
+            background: linear-gradient(135deg, #e8f5e8, #f0fff0);
+            color: #4caf50;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            text-align: center;
+            border: 2px solid rgba(76, 175, 80, 0.2);
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            display: none;
+        }
+        
+        .entry {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 24px;
+            margin-bottom: 20px;
+            border: 2px solid rgba(255, 182, 193, 0.2);
+            border-left: 4px solid #ff99cc;
+            box-shadow: 0 4px 15px rgba(255, 182, 193, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .entry-date {
+            font-weight: 600;
+            color: #8b5a83;
+            margin-bottom: 16px;
+            font-size: 16px;
+            letter-spacing: 0.5px;
+        }
+        
+        .entry-field {
+            margin-bottom: 12px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+        
+        .entry-label {
+            font-weight: 500;
+            color: #b19bb8;
+            min-width: 100px;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+        }
+        
+        .entry-value {
+            color: #6b4663;
+            font-size: 14px;
+            flex: 1;
+        }
+        
+        .no-entries {
+            text-align: center;
+            color: #b19bb8;
+            padding: 60px;
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+        
+        .stats {
+            background: linear-gradient(135deg, #ffb3d9, #ff99cc);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 14px;
+            color: #ffffff;
+            font-weight: 600;
+            letter-spacing: 1px;
+            box-shadow: 0 6px 20px rgba(255, 182, 193, 0.3);
+        }
+        
+        .add-btn {
+            background: rgba(255, 182, 193, 0.2);
+            border: 2px solid rgba(255, 182, 193, 0.4);
+            color: #8b5a83;
+            padding: 12px 18px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 12px;
+            font-family: inherit;
+            margin-top: 12px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .add-btn:hover {
+            background: rgba(255, 182, 193, 0.3);
+            border-color: #ff99cc;
+            color: #6b4663;
+            transform: translateY(-1px);
+        }
+        
+        .input-row, .money-row, .activity-row {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 12px;
+            align-items: center;
+        }
+        
+        .money-row input, .activity-row input {
+            margin-bottom: 0;
+        }
+        
+        .money-amount, .activity-name {
+            flex: 1;
+        }
+        
+        .money-reason {
+            flex: 2;
+        }
+        
+        .activity-duration {
+            flex: 1;
+            min-width: 120px;
+        }
+        
+        .remove-btn {
+            background: linear-gradient(135deg, #ffcdd2, #f8bbd9);
+            color: #8e24aa;
+            border: 2px solid rgba(142, 36, 170, 0.2);
+            padding: 8px 14px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 11px;
+            font-family: inherit;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .remove-btn:hover {
+            background: linear-gradient(135deg, #f8bbd9, #ffcdd2);
+            border-color: #8e24aa;
+            transform: translateY(-1px);
+        }
+        
+        .entry-list {
+            list-style: none;
+        }
+        
+        .entry-list li {
+            margin-bottom: 8px;
+            color: #6b4663;
+        }
+        
+        .entry-list li::before {
+            content: "💕 ";
+            margin-right: 8px;
+        }
+        
+        .entry.collapsed {
+            cursor: pointer;
+        }
+        
+        .entry.collapsed .entry-details {
+            display: none;
+        }
+        
+        .entry.collapsed:hover {
+            background: rgba(255, 182, 193, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 182, 193, 0.2);
+        }
+        
+        .expand-indicator {
+            color: #ff99cc;
+            font-size: 12px;
+            margin-left: 8px;
+        }
+
+        .import-export-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .import-btn {
+            background: linear-gradient(135deg, #ff99cc, #ffb3d9);
+            color: #ffffff;
+            border: none;
+            padding: 12px 18px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 12px;
+            font-family: inherit;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 182, 193, 0.3);
+        }
+        
+        .import-btn:hover {
+            background: linear-gradient(135deg, #ff80bf, #ff99cc);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 182, 193, 0.4);
+        }
+
+        /* Add some sparkly effects */
+        .header::before {
+            content: '✨';
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            font-size: 20px;
+            animation: sparkle 2s ease-in-out infinite alternate;
+        }
+
+        .header::after {
+            content: '💖';
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 20px;
+            animation: sparkle 2s ease-in-out infinite alternate-reverse;
+        }
+
+        @keyframes sparkle {
+            0% { opacity: 0.7; transform: scale(1); }
+            100% { opacity: 1; transform: scale(1.1); }
+        }
+
+        /* Cute scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 182, 193, 0.1);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #ff99cc, #ffb3d9);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #ff80bf, #ff99cc);
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>The System ✨</h1>
+        </div>
+        
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('add')">Add Entry 💕</button>
+            <button class="tab" onclick="showTab('view')">View Entries 📖</button>
+        </div>
+        
+        <div id="addTab" class="content">
+            <div class="success-msg" id="successMsg">Entry recorded successfully! 💖</div>
+            
+            <form id="logForm">
+                <div class="form-group">
+                    <label for="date">Date 📅</label>
+                    <input type="date" id="date" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Sleep Schedule 💤</label>
+                    <div style="display: flex; gap: 12px;">
+                        <div style="flex: 1;">
+                            <input type="time" id="wakeTime" placeholder="Wake time">
+                            <label for="wakeTime" style="font-size: 11px; margin-top: 4px; letter-spacing: 0;">Wake Up 🌅</label>
+                        </div>
+                        <div style="flex: 1;">
+                            <input type="time" id="sleepTime" placeholder="Sleep time">
+                            <label for="sleepTime" style="font-size: 11px; margin-top: 4px; letter-spacing: 0;">Bedtime 🌙</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Meals 🍽️</label>
+                    <div id="mealsList">
+                        <div class="input-row">
+                            <input type="text" class="meal-input" placeholder="Breakfast, lunch, dinner...">
+                        </div>
+                    </div>
+                    <button type="button" class="add-btn" onclick="addMealInput()">+ Add meal 🥗</button>
+                </div>
+                
+                <div class="form-group">
+                    <label>Snacks 🍓</label>
+                    <div id="snacksList">
+                        <div class="input-row">
+                            <input type="text" class="snack-input" placeholder="Coffee, fruit, nuts...">
+                        </div>
+                    </div>
+                    <button type="button" class="add-btn" onclick="addSnackInput()">+ Add snack 🧁</button>
+                </div>
+                
+                <div class="form-group">
+                    <label>Locations 📍</label>
+                    <div id="locationsList">
+                        <div class="input-row">
+                            <input type="text" class="location-input" placeholder="Home, office, downtown...">
+                        </div>
+                    </div>
+                    <button type="button" class="add-btn" onclick="addLocationInput()">+ Add location 🏠</button>
+                </div>
+                
+                <div class="form-group">
+                    <label>Activities 🎯</label>
+                    <div id="activitiesList">
+                        <div class="activity-row">
+                            <input type="text" class="activity-name" placeholder="Work, exercise, reading...">
+                            <input type="text" class="activity-duration" placeholder="Duration (e.g., 2 hours, 30 mins)">
+                        </div>
+                    </div>
+                    <button type="button" class="add-btn" onclick="addActivityInput()">+ Add activity 💃</button>
+                </div>
+                
+                <div class="form-group">
+                    <label>Money 💰</label>
+                    <div id="moneyList">
+                        <div class="money-row">
+                            <input type="number" class="money-amount" step="0.01" placeholder="Amount">
+                            <input type="text" class="money-reason" placeholder="Coffee, transport, income...">
+                        </div>
+                    </div>
+                    <button type="button" class="add-btn" onclick="addMoneyInput()">+ Add transaction 💳</button>
+                </div>
+                
+                <div class="form-group">
+                    <label>Mood ✨</label>
+                    <div class="mood-selector">
+                        <button type="button" class="mood-btn" data-mood="Excellent">Excellent 🌟</button>
+                        <button type="button" class="mood-btn" data-mood="Good">Good 😊</button>
+                        <button type="button" class="mood-btn" data-mood="Neutral">Neutral 😐</button>
+                        <button type="button" class="mood-btn" data-mood="Poor">Poor 😔</button>
+                        <button type="button" class="mood-btn" data-mood="Difficult">Difficult 😰</button>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="notes">Notes 📝</label>
+                    <textarea id="notes" placeholder="Additional thoughts and observations..."></textarea>
+                </div>
+                
+                <button type="submit" class="submit-btn">Record Entry 💖</button>
+            </form>
+        </div>
+        
+        <div id="viewTab" class="content hidden">
+            <div class="import-export-controls">
+                <button class="import-btn" onclick="document.getElementById('fileInput').click()">Import 📥</button>
+                <input type="file" id="fileInput" accept=".json" style="display: none;">
+                <button class="import-btn" onclick="exportData()">Export 📤</button>
+            </div>
+            <div class="stats" id="stats"></div>
+            <div id="entriesList"></div>
+        </div>
+    </div>
+
+    <script>
+        let entries = [];
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('date').valueAsDate = new Date();
+            loadEntries();
+            setupMoodSelector();
+            setupForm();
+            setupFileImport();
+            updateViewTab();
+        });
+
+        // Add a new function to handle file import
+        function setupFileImport() {
+            document.getElementById('fileInput').addEventListener('change', importData);
+        }
+
+        function importData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const importedEntries = JSON.parse(e.target.result);
+                    if (Array.isArray(importedEntries)) {
+                        entries = entries.concat(importedEntries);
+                        saveEntries();
+                        updateViewTab();
+                        alert('Data imported successfully! 💖');
+                    } else {
+                        alert('Invalid JSON file. Please select a file with an array of entries.');
+                    }
+                } catch (error) {
+                    console.error('Error importing file:', error);
+                    alert('An error occurred while importing the file. Please check the file format.');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function exportData() {
+            const dataStr = JSON.stringify(entries, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'daily-journal-entries.json';
+            link.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function setupMoodSelector() {
+            const moodButtons = document.querySelectorAll('.mood-btn');
+            moodButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    moodButtons.forEach(b => b.classList.remove('selected'));
+                    this.classList.add('selected');
+                });
+            });
+        }
+
+        function setupForm() {
+            document.getElementById('logForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const locations = Array.from(document.querySelectorAll('.location-input'))
+                    .map(input => input.value.trim())
+                    .filter(value => value);
+                
+                const activities = Array.from(document.querySelectorAll('.activity-row'))
+                    .map(row => {
+                        const name = row.querySelector('.activity-name').value.trim();
+                        const duration = row.querySelector('.activity-duration').value.trim();
+                        return name ? { name, duration } : null;
+                    })
+                    .filter(activity => activity);
+                
+                const meals = Array.from(document.querySelectorAll('.meal-input'))
+                    .map(input => input.value.trim())
+                    .filter(value => value);
+                
+                const snacks = Array.from(document.querySelectorAll('.snack-input'))
+                    .map(input => input.value.trim())
+                    .filter(value => value);
+                
+                const moneyTransactions = Array.from(document.querySelectorAll('.money-row'))
+                    .map(row => {
+                        const amount = parseFloat(row.querySelector('.money-amount').value) || 0;
+                        const reason = row.querySelector('.money-reason').value.trim();
+                        return amount !== 0 || reason ? { amount, reason } : null;
+                    })
+                    .filter(transaction => transaction);
+                
+                const selectedMood = document.querySelector('.mood-btn.selected')?.dataset.mood || '';
+                
+                const entry = {
+                    id: Date.now(),
+                    date: document.getElementById('date').value,
+                    wakeTime: document.getElementById('wakeTime').value,
+                    sleepTime: document.getElementById('sleepTime').value,
+                    locations: locations,
+                    activities: activities,
+                    meals: meals,
+                    snacks: snacks,
+                    moneyTransactions: moneyTransactions,
+                    mood: selectedMood,
+                    notes: document.getElementById('notes').value
+                };
+                
+                entries.push(entry);
+                saveEntries();
+                showSuccessMessage();
+                resetForm();
+                updateViewTab();
+            });
+        }
+
+        function addLocationInput() {
+            const locationsList = document.getElementById('locationsList');
+            const newRow = document.createElement('div');
+            newRow.className = 'input-row';
+            newRow.innerHTML = `
+                <input type="text" class="location-input" placeholder="Location...">
+                <button type="button" class="remove-btn" onclick="removeRow(this)">Remove 🗑️</button>
+            `;
+            locationsList.appendChild(newRow);
+        }
+
+        function addActivityInput() {
+            const activitiesList = document.getElementById('activitiesList');
+            const newRow = document.createElement('div');
+            newRow.className = 'activity-row';
+            newRow.innerHTML = `
+                <input type="text" class="activity-name" placeholder="Activity...">
+                <input type="text" class="activity-duration" placeholder="Duration...">
+                <button type="button" class="remove-btn" onclick="removeRow(this)">Remove 🗑️</button>
+            `;
+            activitiesList.appendChild(newRow);
+        }
+
+        function addMealInput() {
+            const mealsList = document.getElementById('mealsList');
+            const newRow = document.createElement('div');
+            newRow.className = 'input-row';
+            newRow.innerHTML = `
+                <input type="text" class="meal-input" placeholder="Meal...">
+                <button type="button" class="remove-btn" onclick="removeRow(this)">Remove 🗑️</button>
+            `;
+            mealsList.appendChild(newRow);
+        }
+
+        function addSnackInput() {
+            const snacksList = document.getElementById('snacksList');
+            const newRow = document.createElement('div');
+            newRow.className = 'input-row';
+            newRow.innerHTML = `
+                <input type="text" class="snack-input" placeholder="Snack...">
+                <button type="button" class="remove-btn" onclick="removeRow(this)">Remove 🗑️</button>
+            `;
+            snacksList.appendChild(newRow);
+        }
+
+        function addMoneyInput() {
+            const moneyList = document.getElementById('moneyList');
+            const newRow = document.createElement('div');
+            newRow.className = 'money-row';
+            newRow.innerHTML = `
+                <input type="number" class="money-amount" step="0.01" placeholder="Amount">
+                <input type="text" class="money-reason" placeholder="Description...">
+                <button type="button" class="remove-btn" onclick="removeRow(this)">Remove 🗑️</button>
+            `;
+            moneyList.appendChild(newRow);
+        }
+
+        function removeRow(button) {
+            button.parentElement.remove();
+        }
+
+        function resetForm() {
+            document.getElementById('logForm').reset();
+            document.getElementById('date').valueAsDate = new Date();
+            document.querySelectorAll('.mood-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            
+            // Reset all dynamic input lists to just one input
+            resetInputList('locationsList', 'location-input', 'Home, office, downtown...');
+            resetInputList('mealsList', 'meal-input', 'Breakfast, lunch, dinner...');
+            resetInputList('snacksList', 'snack-input', 'Coffee, fruit, nuts...');
+            resetActivityList();
+            resetMoneyList();
+        }
+        
+        function resetInputList(containerId, inputClass, placeholder) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = `
+                <div class="input-row">
+                    <input type="text" class="${inputClass}" placeholder="${placeholder}">
+                </div>
+            `;
+        }
+        
+        function resetActivityList() {
+            const activitiesList = document.getElementById('activitiesList');
+            activitiesList.innerHTML = `
+                <div class="activity-row">
+                    <input type="text" class="activity-name" placeholder="Work, exercise, reading...">
+                    <input type="text" class="activity-duration" placeholder="Duration (e.g., 2 hours, 30 mins)">
+                </div>
+            `;
+        }
+        
+        function resetMoneyList() {
+            const moneyList = document.getElementById('moneyList');
+            moneyList.innerHTML = `
+                <div class="money-row">
+                    <input type="number" class="money-amount" step="0.01" placeholder="Amount">
+                    <input type="text" class="money-reason" placeholder="Coffee, transport, income...">
+                </div>
+            `;
+        }
+
+        function showSuccessMessage() {
+            const msg = document.getElementById('successMsg');
+            msg.style.display = 'block';
+            setTimeout(() => {
+                msg.style.display = 'none';
+            }, 2000);
+        }
+
+        function saveEntries() {
+            // Store in localStorage for data persistence
+            localStorage.setItem('journalEntries', JSON.stringify(entries));
+        }
+
+        function loadEntries() {
+            // Load from localStorage for data persistence
+            const stored = localStorage.getItem('journalEntries');
+            if (stored) {
+                try {
+                    entries = JSON.parse(stored);
+                } catch (error) {
+                    console.error('Error loading entries:', error);
+                    entries = [];
+                }
+            } else {
+                entries = [];
+            }
+        }
+
+        function showTab(tabName) {
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelector(`.tab[onclick="showTab('${tabName}')"]`).classList.add('active');
+            
+            if (tabName === 'add') {
+                document.getElementById('addTab').classList.remove('hidden');
+                document.getElementById('viewTab').classList.add('hidden');
+            } else {
+                document.getElementById('addTab').classList.add('hidden');
+                document.getElementById('viewTab').classList.remove('hidden');
+                updateViewTab();
+            }
+        }
+
+        function updateViewTab() {
+            updateStats();
+            displayEntries();
+        }
+
+        function updateStats() {
+            const statsDiv = document.getElementById('stats');
+            const totalEntries = entries.length;
+            
+            const totalMoney = entries.reduce((sum, entry) => {
+                return sum + (entry.moneyTransactions?.reduce((entrySum, transaction) => 
+                    entrySum + transaction.amount, 0) || 0);
+            }, 0);
+            
+            statsDiv.innerHTML = `
+                ENTRIES: ${totalEntries} 💕 NET: ${totalMoney.toFixed(2)} 💰
+            `;
+        }
+
+        function displayEntries() {
+            const entriesDiv = document.getElementById('entriesList');
+            
+            if (entries.length === 0) {
+                entriesDiv.innerHTML = '<div class="no-entries">No entries recorded yet 💭</div>';
+                return;
+            }
+            
+            const sortedEntries = entries.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            const entriesHTML = sortedEntries.map(entry => {
+                const formatDate = (dateStr) => {
+                    const date = new Date(dateStr);
+                    return date.toLocaleDateString('en-US', { 
+                        weekday: 'long', 
+                        year: 'numeric', 
+                        month: 'long', 
+                        day: 'numeric' 
+                    });
+                };
+
+                const formatTime = (timeStr) => {
+                    if (!timeStr) return '';
+                    const [hours, minutes] = timeStr.split(':');
+                    const date = new Date();
+                    date.setHours(parseInt(hours), parseInt(minutes));
+                    return date.toLocaleTimeString('en-US', { 
+                        hour: 'numeric', 
+                        minute: '2-digit',
+                        hour12: true 
+                    });
+                };
+
+                let entryHTML = `
+                    <div class="entry">
+                        <div class="entry-date">${formatDate(entry.date)}</div>
+                        <div class="entry-details">
+                `;
+
+                if (entry.wakeTime || entry.sleepTime) {
+                    entryHTML += `
+                        <div class="entry-field">
+                            <div class="entry-label">Sleep 💤</div>
+                            <div class="entry-value">
+                                ${entry.wakeTime ? `Woke up: ${formatTime(entry.wakeTime)}` : ''}
+                                ${entry.wakeTime && entry.sleepTime ? ' | ' : ''}
+                                ${entry.sleepTime ? `Bedtime: ${formatTime(entry.sleepTime)}` : ''}
+                            </div>
+                        </div>
+                    `;
+                }
+
+                if (entry.locations && entry.locations.length > 0) {
+                    entryHTML += `
+                        <div class="entry-field">
+                            <div class="entry-label">Places 📍</div>
+                            <div class="entry-value">
+                                <ul class="entry-list">
+                                    ${entry.locations.map(location => `<li>${location}</li>`).join('')}
+                                </ul>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                if (entry.activities && entry.activities.length > 0) {
+                    entryHTML += `
+                        <div class="entry-field">
+                            <div class="entry-label">Activities 🎯</div>
+                            <div class="entry-value">
+                                <ul class="entry-list">
+                                    ${entry.activities.map(activity => 
+                                        `<li>${activity.name}${activity.duration ? ` (${activity.duration})` : ''}</li>`
+                                    ).join('')}
+                                </ul>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                if (entry.meals && entry.meals.length > 0) {
+                    entryHTML += `
+                        <div class="entry-field">
+                            <div class="entry-label">Meals 🍽️</div>
+                            <div class="entry-value">
+                                <ul class="entry-list">
+                                    ${entry.meals.map(meal => `<li>${meal}</li>`).join('')}
+                                </ul>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                if (entry.snacks && entry.snacks.length > 0) {
+                    entryHTML += `
+                        <div class="entry-field">
+                            <div class="entry-label">Snacks 🍓</div>
+                            <div class="entry-value">
+                                <ul class="entry-list">
+                                    ${entry.snacks.map(snack => `<li>${snack}</li>`).join('')}
+                                </ul>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                if (entry.moneyTransactions && entry.moneyTransactions.length > 0) {
+                    entryHTML += `
+                        <div class="entry-field">
+                            <div class="entry-label">Money 💰</div>
+                            <div class="entry-value">
+                                <ul class="entry-list">
+                                    ${entry.moneyTransactions.map(transaction => 
+                                        `<li>${transaction.amount.toFixed(2)}${transaction.reason ? ` - ${transaction.reason}` : ''}</li>`
+                                    ).join('')}
+                                </ul>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                if (entry.mood) {
+                    entryHTML += `
+                        <div class="entry-field">
+                            <div class="entry-label">Mood ✨</div>
+                            <div class="entry-value">${entry.mood}</div>
+                        </div>
+                    `;
+                }
+
+                if (entry.notes) {
+                    entryHTML += `
+                        <div class="entry-field">
+                            <div class="entry-label">Notes 📝</div>
+                            <div class="entry-value">${entry.notes}</div>
+                        </div>
+                    `;
+                }
+
+                entryHTML += `
+                        </div>
+                    </div>
+                `;
+
+                return entryHTML;
+            }).join('');
+            
+            entriesDiv.innerHTML = entriesHTML;
+        }
+    </script>
+</body>
+</html>
